@@ -112,4 +112,3 @@ def mainNewLogs():
             print(f"✅ Inseridos e removidos {len(ids_inseridos)} registros")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
-
