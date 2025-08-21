@@ -100,6 +100,7 @@ if __name__ == '__main__':
             i.json_analise, i.obs_analise
         FROM leitores.tb_whatszap_index_zapcontatos_new i
         JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = i.ar_id
+        WHERE i.datahora < '2025-01-01'
         ORDER BY i.datahora ASC
     """
 
