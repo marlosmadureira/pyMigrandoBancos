@@ -1,6 +1,3 @@
-import os
-from dotenv import load_dotenv
-from psycopg2 import OperationalError
 from pyBibliotecas import *
 
 # Configs
