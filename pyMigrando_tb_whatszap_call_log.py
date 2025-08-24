@@ -132,7 +132,7 @@ def mainCallLogs():
 
         if result["cal_ids"]:
             delete_origem(result["cal_ids"])
-            delete_origem_arquivos(result["ar_ids"])
+            # delete_origem_arquivos(result["ar_ids"])
             print(f"✅ Inseridos e removidos {len(result['cal_ids'])} registros + {len(result['ar_ids'])} arquivos")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")

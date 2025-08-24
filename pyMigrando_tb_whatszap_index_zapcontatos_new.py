@@ -130,7 +130,7 @@ def mainNewLogs():
 
         if result["indn_ids"]:
             delete_origem(result["indn_ids"])
-            delete_origem_arquivos(result["ar_ids"])
+            # delete_origem_arquivos(result["ar_ids"])
             print(f"✅ Inseridos e removidos {len(result['indn_ids'])} registros + {len(result['ar_ids'])} arquivos")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
