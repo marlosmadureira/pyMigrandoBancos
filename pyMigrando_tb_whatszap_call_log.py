@@ -145,3 +145,6 @@ def mainCallLogs():
             print("⚠️ Nenhum registro inserido, nada foi apagado")
 
         print_color(f"Total Processado {total}", 32)
+
+        if (total > 300000):
+            exit()
