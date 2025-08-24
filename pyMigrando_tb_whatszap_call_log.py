@@ -62,6 +62,8 @@ def insert_batch_destino_call(rows):
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_call, dados_call)
 
+            print_color(f"{db.query}", 32)
+
             con.commit()
             return [r[10] for r in rows]  # cal_id inseridos
         except Exception as e:
