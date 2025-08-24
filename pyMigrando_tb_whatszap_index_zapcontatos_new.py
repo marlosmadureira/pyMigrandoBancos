@@ -62,8 +62,6 @@ def insert_batch_destino(rows):
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_index, dados_index)
 
-            print_color(f"{db.query}", 32)
-
             con.commit()
             return [r[10] for r in rows]  # retorna lista de indn_id inseridos
         except Exception as e:
@@ -82,8 +80,6 @@ def delete_origem(ids):
             sql = "DELETE FROM leitores.tb_whatszap_index_zapcontatos_new WHERE indn_id IN %s"
             db.execute(sql, (tuple(ids),))  # precisa ser tupla para o psycopg2 entender
             print_color(f"Deletados {db.rowcount} registros", 32)
-
-            print_color(f"{db.query}", 32)
 
             con.commit()
         except Exception as e:
