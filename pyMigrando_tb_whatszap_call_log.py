@@ -127,10 +127,14 @@ def mainCallLogs():
         ORDER BY c.call_timestamp ASC
     """
 
+    total = 0
+
     for lote in fetch_batches_call(sql):
         agora = datetime.now()
         print(f"🔄 Processando Calllogs lote de {len(lote)} registros... {agora.strftime('%d/%m/%Y %H:%M:%S')} ")
         result = insert_batch_destino(lote)
+
+        total = total + len(lote)
 
         if result["cal_ids"]:
             delete_origem(result["cal_ids"])
@@ -139,3 +143,5 @@ def mainCallLogs():
             print(f"✅ Inseridos e removidos {len(result['cal_ids'])} registros {agora.strftime('%d/%m/%Y %H:%M:%S')} ")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
+
+        print_color(f"Total Processado {total}", 32)

@@ -124,11 +124,13 @@ def mainNewLogs():
         WHERE i.datahora < '2024-01-01'
         ORDER BY i.datahora ASC
     """
-
+    total = 0
     for lote in fetch_batches(sql):
         agora = datetime.now()
         print(f"🔄 Processando Newlogs lote de {len(lote)} registros... {agora.strftime('%d/%m/%Y %H:%M:%S')}")
         result = insert_batch_destino(lote)
+
+        total = total + len(lote)
 
         if result["indn_ids"]:
             delete_origem(result["indn_ids"])
@@ -137,3 +139,5 @@ def mainNewLogs():
             print(f"✅ Inseridos e removidos {len(result['indn_ids'])} registros {agora.strftime('%d/%m/%Y %H:%M:%S')}")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
+
+        print_color(f"Total Processado {total}", 32)
