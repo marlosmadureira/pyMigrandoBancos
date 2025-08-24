@@ -79,14 +79,19 @@ def delete_origem(ids):
     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
         db = con.cursor()
         try:
-            sql = "DELETE FROM leitores.tb_whatszap_index_zapcontatos_new WHERE indn_id = ANY(%s)"
-            db.execute(sql, (ids,))
+            sql = "DELETE FROM leitores.tb_whatszap_index_zapcontatos_new WHERE indn_id IN %s"
+            db.execute(sql, (tuple(ids),))  # precisa ser tupla para o psycopg2 entender
+            print_color(f"Deletados {db.rowcount} registros", 32)
+
+            print_color(f"{db.query}", 32)
+
             con.commit()
         except Exception as e:
             con.rollback()
-            print_color(f"Erro ao deletar origem: {e}", 31)
+            print_color(f"Erro ao deletar origem (call_log): {e}", 31)
         finally:
             db.close()
+
 
 def mainNewLogs():
     sql = """
@@ -108,6 +113,7 @@ def mainNewLogs():
         ids_inseridos = insert_batch_destino(lote)
         if ids_inseridos:
             delete_origem(ids_inseridos)
+            exit()
             print(f"✅ Inseridos e removidos {len(ids_inseridos)} registros")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")

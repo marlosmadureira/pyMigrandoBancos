@@ -74,14 +74,18 @@ def insert_batch_destino_call(rows):
             db.close()
 
 
-def delete_origem_call(ids):
+def delete_origem(ids):
     if not ids:
         return
     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
         db = con.cursor()
         try:
-            sql = "DELETE FROM leitores.tb_whatszap_call_log WHERE cal_id = ANY(%s)"
-            db.execute(sql, (ids,))
+            sql = "DELETE FROM leitores.tb_whatszap_call_log WHERE cal_id IN %s"
+            db.execute(sql, (tuple(ids),))  # precisa ser tupla para o psycopg2 entender
+            print_color(f"Deletados {db.rowcount} registros", 32)
+
+            print_color(f"{db.query}", 32)
+
             con.commit()
         except Exception as e:
             con.rollback()
@@ -109,7 +113,7 @@ def mainCallLogs():
         print(f"🔄 Processando Calllogs lote de {len(lote)} registros...")
         ids_inseridos = insert_batch_destino_call(lote)
         if ids_inseridos:
-            delete_origem_call(ids_inseridos)
+            delete_origem(ids_inseridos)
             print(f"✅ Inseridos e removidos {len(ids_inseridos)} registros")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
