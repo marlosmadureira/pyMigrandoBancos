@@ -1,4 +1,5 @@
 from pyBibliotecas import *
+from datetime import datetime
 
 # Configs
 load_dotenv()
@@ -124,13 +125,15 @@ def mainNewLogs():
         ORDER BY i.datahora ASC
     """
 
+    agora = datetime.now()
+
     for lote in fetch_batches(sql):
-        print(f"🔄 Processando Newlogs lote de {len(lote)} registros...")
+        print(f"🔄 Processando Newlogs lote de {len(lote)} registros... {agora.strftime('%d/%m/%Y %H:%M:%S')}")
         result = insert_batch_destino(lote)
 
         if result["indn_ids"]:
             delete_origem(result["indn_ids"])
             # delete_origem_arquivos(result["ar_ids"])
-            print(f"✅ Inseridos e removidos {len(result['indn_ids'])} registros")
+            print(f"✅ Inseridos e removidos {len(result['indn_ids'])} registros {agora.strftime('%d/%m/%Y %H:%M:%S')}")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
