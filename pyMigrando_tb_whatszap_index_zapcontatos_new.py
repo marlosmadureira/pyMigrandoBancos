@@ -61,13 +61,33 @@ def insert_batch_destino(rows):
 
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_index, dados_index)
-
             con.commit()
-            return [r[10] for r in rows]  # retorna lista de indn_id inseridos
+            return {
+                "indn_ids": [r[10] for r in rows],
+                "ar_ids": [r[0] for r in rows],
+            }
         except Exception as e:
             con.rollback()
             print_color(f"Erro ao inserir no destino: {e}", 31)
-            return []
+            return {"indn_ids": [], "ar_ids": []}
+        finally:
+            db.close()
+
+def delete_origem_arquivos(ar_ids):
+    """Remove registros da tabela de arquivos no Prod"""
+    if not ar_ids:
+        return
+    with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
+        db = con.cursor()
+        try:
+            sql = "DELETE FROM leitores.tb_whatszap_arquivo WHERE ar_id IN %s"
+            db.execute(sql, (tuple(ar_ids),))
+            print_color(f"🗑️ Deletados {db.rowcount} arquivos", 35)
+
+            con.commit()
+        except Exception as e:
+            con.rollback()
+            print_color(f"Erro ao deletar arquivos (arquivo): {e}", 31)
         finally:
             db.close()
 
@@ -106,9 +126,11 @@ def mainNewLogs():
 
     for lote in fetch_batches(sql):
         print(f"🔄 Processando Newlogs lote de {len(lote)} registros...")
-        ids_inseridos = insert_batch_destino(lote)
-        if ids_inseridos:
-            delete_origem(ids_inseridos)
-            print(f"✅ Inseridos e removidos {len(ids_inseridos)} registros")
+        result = insert_batch_destino(lote)
+
+        if result["indn_ids"]:
+            delete_origem(result["indn_ids"])
+            delete_origem_arquivos(result["ar_ids"])
+            print(f"✅ Inseridos e removidos {len(result['indn_ids'])} registros + {len(result['ar_ids'])} arquivos")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")

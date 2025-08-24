@@ -27,7 +27,7 @@ def fetch_batches_call(sql, batch_size=5000):
         db.close()
 
 
-def insert_batch_destino_call(rows):
+def insert_batch_destino(rows):
     with conectBDPostgresBk(DB_HOST_BK, DB_NAME_BK, DB_USER_BK, DB_PASS_BK) as con:
         db = con.cursor()
         try:
@@ -61,13 +61,34 @@ def insert_batch_destino_call(rows):
 
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_call, dados_call)
-
             con.commit()
-            return [r[10] for r in rows]  # cal_id inseridos
+
+            return {
+                "cal_ids": [r[10] for r in rows],
+                "ar_ids": [r[0] for r in rows],
+            }
         except Exception as e:
             con.rollback()
             print_color(f"Erro ao inserir no destino (call_log): {e}", 31)
-            return []
+            return {"cal_ids": [], "ar_ids": []}
+        finally:
+            db.close()
+
+def delete_origem_arquivos(ar_ids):
+    """Remove registros da tabela de arquivos no Prod"""
+    if not ar_ids:
+        return
+    with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
+        db = con.cursor()
+        try:
+            sql = "DELETE FROM leitores.tb_whatszap_arquivo WHERE ar_id IN %s"
+            db.execute(sql, (tuple(ar_ids),))
+            print_color(f"🗑️ Deletados {db.rowcount} arquivos", 35)
+
+            con.commit()
+        except Exception as e:
+            con.rollback()
+            print_color(f"Erro ao deletar arquivos (arquivo): {e}", 31)
         finally:
             db.close()
 
@@ -107,9 +128,11 @@ def mainCallLogs():
 
     for lote in fetch_batches_call(sql):
         print(f"🔄 Processando Calllogs lote de {len(lote)} registros...")
-        ids_inseridos = insert_batch_destino_call(lote)
-        if ids_inseridos:
-            delete_origem(ids_inseridos)
-            print(f"✅ Inseridos e removidos {len(ids_inseridos)} registros")
+        result = insert_batch_destino(lote)
+
+        if result["cal_ids"]:
+            delete_origem(result["cal_ids"])
+            delete_origem_arquivos(result["ar_ids"])
+            print(f"✅ Inseridos e removidos {len(result['cal_ids'])} registros + {len(result['ar_ids'])} arquivos")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
