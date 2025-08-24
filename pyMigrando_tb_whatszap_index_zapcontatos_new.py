@@ -113,7 +113,6 @@ def mainNewLogs():
         ids_inseridos = insert_batch_destino(lote)
         if ids_inseridos:
             delete_origem(ids_inseridos)
-            exit()
             print(f"✅ Inseridos e removidos {len(ids_inseridos)} registros")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
