@@ -1,5 +1,6 @@
 import psycopg2
 import os
+import subprocess
 from dotenv import load_dotenv
 from psycopg2 import OperationalError
 
@@ -109,3 +110,6 @@ def testar_conexao_postgres_bk():
     except Exception as e:
         print_color(f"❌ Erro no teste de conexão PostgreSQL: {e}", 31)
         return False
+
+def beep():
+    subprocess.run(["play", "-nq", "synth", "0.2", "sin", "440"])

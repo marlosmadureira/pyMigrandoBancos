@@ -144,4 +144,6 @@ def mainCallLogs():
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
 
+        beep()
+
         print_color(f"\nTotal Processado {total}\n", 34)
