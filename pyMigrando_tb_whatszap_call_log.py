@@ -166,8 +166,8 @@ def mainCallLogs():
             c.call_from, c.call_to, c.call_from_ip, c.call_from_port, 
             c.call_media_type, c.call_phone_number, c.call_state, c.call_platform, 
             c.telefone, c.ar_id, c.linh_id, c.sentido, c.json_analise, c.obs_analise
-        FROM leitores.tb_whatszap_call_log c
-        JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = c.ar_id
+        FROM leitores.tb_whatszap_call_log c WITH (NOLOCK) 
+        JOIN leitores.tb_whatszap_arquivo a WITH (NOLOCK)  ON a.ar_id = c.ar_id
         WHERE c.call_timestamp < '2024-06-01'
         ORDER BY c.call_timestamp ASC
     """
