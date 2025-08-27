@@ -22,7 +22,7 @@ DB_NAME_BK_2= os.getenv("DB_NAME_BK_2")
 DB_USER_BK_2 = os.getenv("DB_USER_BK_2")
 DB_PASS_BK_2 = os.getenv("DB_PASS_BK_2")
 
-def fetch_batches_call(sql, batch_size=5000):
+def fetch_batches_call(sql, batch_size=1000):
     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
         db = con.cursor(name="cursor_call_batch")
         db.execute(sql)
