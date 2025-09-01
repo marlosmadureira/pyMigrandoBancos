@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     mainNewLogs()
 
-    #mainCallLogs()
+    mainCallLogs()
 
     #CASO QUEIRA EXCEUTAR EM PARALELO BASTA COMENTAR AS DUAS FUNÇÕES ACIMA E DESCOMENTAR A FUNÇÃO ABAIXO
     #run_parallel()
