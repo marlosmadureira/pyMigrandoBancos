@@ -22,7 +22,7 @@ DB_NAME_BK_2= os.getenv("DB_NAME_BK_2")
 DB_USER_BK_2 = os.getenv("DB_USER_BK_2")
 DB_PASS_BK_2 = os.getenv("DB_PASS_BK_2")
 
-def fetch_batches_call(sql, batch_size=1000):
+def fetch_batches_call(sql, batch_size=3000):
     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
         db = con.cursor(name="cursor_call_batch")
         db.execute(sql)
@@ -169,7 +169,7 @@ def mainCallLogs():
         FROM leitores.tb_whatszap_call_log c
         JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = c.ar_id
         WHERE c.call_timestamp < '2025-01-01'
-        ORDER BY c.call_timestamp ASC
+        ORDER BY c.call_timestamp DESC
     """
 
     total = 0

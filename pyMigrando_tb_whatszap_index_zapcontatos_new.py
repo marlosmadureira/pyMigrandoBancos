@@ -22,7 +22,7 @@ DB_NAME_BK_2= os.getenv("DB_NAME_BK_2")
 DB_USER_BK_2 = os.getenv("DB_USER_BK_2")
 DB_PASS_BK_2 = os.getenv("DB_PASS_BK_2")
 
-def fetch_batches(sql, batch_size=1000):
+def fetch_batches(sql, batch_size=3000):
     """Lê em lotes do banco origem"""
     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
         db = con.cursor(name="cursor_batch")  # server-side cursor
@@ -167,7 +167,7 @@ def mainNewLogs():
         FROM leitores.tb_whatszap_index_zapcontatos_new i
         JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = i.ar_id
         WHERE i.datahora < '2025-01-01'
-        ORDER BY i.datahora ASC
+        ORDER BY i.datahora DESC
     """
     total = 0
     for lote in fetch_batches(sql):
