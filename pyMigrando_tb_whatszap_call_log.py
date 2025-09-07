@@ -169,7 +169,7 @@ def mainCallLogs():
         FROM leitores.tb_whatszap_call_log c
         JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = c.ar_id
         WHERE c.call_timestamp < '2025-01-01'
-        ORDER BY c.call_timestamp ASC
+        ORDER BY c.call_timestamp DESC
     """
 
     total = 0

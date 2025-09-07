@@ -167,7 +167,7 @@ def mainNewLogs():
         FROM leitores.tb_whatszap_index_zapcontatos_new i
         JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = i.ar_id
         WHERE i.datahora < '2025-01-01'
-        ORDER BY i.datahora ASC
+        ORDER BY i.datahora DESC
     """
     total = 0
     for lote in fetch_batches(sql):
