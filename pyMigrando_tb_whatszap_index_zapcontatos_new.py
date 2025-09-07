@@ -22,7 +22,7 @@ DB_NAME_BK_2= os.getenv("DB_NAME_BK_2")
 DB_USER_BK_2 = os.getenv("DB_USER_BK_2")
 DB_PASS_BK_2 = os.getenv("DB_PASS_BK_2")
 
-def fetch_batches(sql, batch_size=1000):
+def fetch_batches(sql, batch_size=3000):
     """Lê em lotes do banco origem"""
     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
         db = con.cursor(name="cursor_batch")  # server-side cursor
