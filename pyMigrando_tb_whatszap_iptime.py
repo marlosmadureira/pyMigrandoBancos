@@ -70,13 +70,13 @@ def insert_batch_destino_83(rows):
             con.commit()
 
             return {
-                "cal_ids": [r[10] for r in rows],
+                "ip_ids": [r[10] for r in rows],
                 "ar_ids": [r[0] for r in rows],
             }
         except Exception as e:
             con.rollback()
             print_color(f"Erro ao inserir no destino (call_log): {e}", 31)
-            return {"cal_ids": [], "ar_ids": []}
+            return {"ip_ids": [], "ar_ids": []}
         finally:
             db.close()
 
@@ -194,11 +194,11 @@ def mainipTimes():
 
         total = total + len(lote)
 
-        if result["cal_ids"]:
-            delete_origem(result["cal_ids"])
+        if result["ip_ids"]:
+            delete_origem(result["ip_ids"])
             # delete_origem_arquivos(result["ar_ids"])
             agora = datetime.now()
-            print(f"✅ Inseridos e removidos {len(result['cal_ids'])} registros {agora.strftime('%d/%m/%Y %H:%M:%S')} ")
+            print(f"✅ Inseridos e removidos {len(result['ip_ids'])} registros {agora.strftime('%d/%m/%Y %H:%M:%S')} ")
         else:
             print("⚠️ Nenhum registro inserido, nada foi apagado")
 
