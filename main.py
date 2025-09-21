@@ -1,5 +1,6 @@
 from pyMigrando_tb_whatszap_call_log import *
 from pyMigrando_tb_whatszap_index_zapcontatos_new import *
+from pyMigrando_tb_whatszap_iptime import *
 from pyBibliotecas import *
 import threading
 
@@ -23,9 +24,11 @@ if __name__ == '__main__':
 
     print_color(f"\nInicializando....\n", 32)
 
-    mainNewLogs()
+    #mainNewLogs()
 
-    mainCallLogs()
+    #mainCallLogs()
+
+    mainipTimes()
 
     #CASO QUEIRA EXCEUTAR EM PARALELO BASTA COMENTAR AS DUAS FUNÇÕES ACIMA E DESCOMENTAR A FUNÇÃO ABAIXO
     #run_parallel()

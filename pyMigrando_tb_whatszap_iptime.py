@@ -157,7 +157,7 @@ def delete_origem(ids):
             db.close()
 
 
-def mainCallLogs():
+def mainipTimes():
     sql = """
           SELECT a.ar_id, \
                  a.ar_dtcadastro, \
