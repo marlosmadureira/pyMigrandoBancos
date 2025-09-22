@@ -122,22 +122,22 @@ def insert_batch_destino_132(rows):
         finally:
             db.close()
 
-def delete_origem_arquivos(ar_ids):
-    """Remove registros da tabela de arquivos no Prod"""
-    if not ar_ids:
-        return
-    with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
-        db = con.cursor()
-        try:
-            sql = "DELETE FROM leitores.tb_whatszap_arquivo WHERE ar_id IN %s"
-            db.execute(sql, (tuple(ar_ids),))
-            print_color(f"🗑️ Deletados {db.rowcount} arquivos", 35)
-            con.commit()
-        except Exception as e:
-            con.rollback()
-            print_color(f"Erro ao deletar arquivos (arquivo): {e}", 31)
-        finally:
-            db.close()
+# def delete_origem_arquivos(ar_ids):
+#     """Remove registros da tabela de arquivos no Prod"""
+#     if not ar_ids:
+#         return
+#     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
+#         db = con.cursor()
+#         try:
+#             sql = "DELETE FROM leitores.tb_whatszap_arquivo WHERE ar_id IN %s"
+#             db.execute(sql, (tuple(ar_ids),))
+#             print_color(f"🗑️ Deletados {db.rowcount} arquivos", 35)
+#             con.commit()
+#         except Exception as e:
+#             con.rollback()
+#             print_color(f"Erro ao deletar arquivos (arquivo): {e}", 31)
+#         finally:
+#             db.close()
 
 
 def delete_origem(ids):
