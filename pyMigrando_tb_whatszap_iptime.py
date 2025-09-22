@@ -168,9 +168,9 @@ def delete_origem(ids):
 def mainipTimes():
     ultimo_id = get_last_id("iptimes.txt")
     if ultimo_id:
-        ultimo_id = 0
         print("Último ID gravado:", ultimo_id)
     else:
+        ultimo_id = 0
         print("Nenhum ID encontrado ainda.")
 
     sql = f"""
