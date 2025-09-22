@@ -147,21 +147,21 @@ def insert_batch_destino_132(rows):
 #             db.close()
 
 
-def delete_origem(ids):
-    if not ids:
-        return
-    with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
-        db = con.cursor()
-        try:
-            sql = "DELETE FROM leitores.tb_whatszap_call_log WHERE cal_id IN %s"
-            db.execute(sql, (tuple(ids),))  # precisa ser tupla para o psycopg2 entender
-            print_color(f"Deletados {db.rowcount} registros", 32)
-            con.commit()
-        except Exception as e:
-            con.rollback()
-            print_color(f"Erro ao deletar origem (call_log): {e}", 31)
-        finally:
-            db.close()
+# def delete_origem(ids):
+#     if not ids:
+#         return
+#     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
+#         db = con.cursor()
+#         try:
+#             sql = "DELETE FROM leitores.tb_whatszap_call_log WHERE cal_id IN %s"
+#             db.execute(sql, (tuple(ids),))  # precisa ser tupla para o psycopg2 entender
+#             print_color(f"Deletados {db.rowcount} registros", 32)
+#             con.commit()
+#         except Exception as e:
+#             con.rollback()
+#             print_color(f"Erro ao deletar origem (call_log): {e}", 31)
+#         finally:
+#             db.close()
 
 
 def mainCallLogs():
@@ -197,7 +197,7 @@ def mainCallLogs():
         total = total + len(lote)
 
         if result["cal_ids"]:
-            delete_origem(result["cal_ids"])
+            # delete_origem(result["cal_ids"])
             # delete_origem_arquivos(result["ar_ids"])
             agora = datetime.now()
             print(f"✅ Inseridos e removidos {len(result['cal_ids'])} registros {agora.strftime('%d/%m/%Y %H:%M:%S')} ")

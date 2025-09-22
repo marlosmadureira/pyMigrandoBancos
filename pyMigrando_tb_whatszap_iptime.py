@@ -148,21 +148,21 @@ def insert_batch_destino_132(rows):
 #             db.close()
 
 
-def delete_origem(ids):
-    if not ids:
-        return
-    with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
-        db = con.cursor()
-        try:
-            sql = "DELETE FROM leitores.tb_whatszap_iptime WHERE ip_id IN %s"
-            db.execute(sql, (tuple(ids),))  # precisa ser tupla para o psycopg2 entender
-            print_color(f"Deletados {db.rowcount} registros", 32)
-            con.commit()
-        except Exception as e:
-            con.rollback()
-            print_color(f"Erro ao deletar origem (ip_id): {e}", 31)
-        finally:
-            db.close()
+# def delete_origem(ids):
+#     if not ids:
+#         return
+#     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
+#         db = con.cursor()
+#         try:
+#             sql = "DELETE FROM leitores.tb_whatszap_iptime WHERE ip_id IN %s"
+#             db.execute(sql, (tuple(ids),))  # precisa ser tupla para o psycopg2 entender
+#             print_color(f"Deletados {db.rowcount} registros", 32)
+#             con.commit()
+#         except Exception as e:
+#             con.rollback()
+#             print_color(f"Erro ao deletar origem (ip_id): {e}", 31)
+#         finally:
+#             db.close()
 
 
 def mainipTimes():
@@ -187,7 +187,7 @@ def mainipTimes():
         total = total + len(lote)
 
         if result["ip_ids"]:
-            delete_origem(result["ip_ids"])
+            #delete_origem(result["ip_ids"])
             # delete_origem_arquivos(result["ar_ids"])
             agora = datetime.now()
             print(f"✅ Inseridos e removidos {len(result['ip_ids'])} registros {agora.strftime('%d/%m/%Y %H:%M:%S')} ")
