@@ -159,30 +159,7 @@ def delete_origem(ids):
 
 def mainipTimes():
     sql = """
-          SELECT a.ar_id, \
-                 a.ar_dtcadastro, \
-                 a.ar_arquivo, \
-                 a.ar_tipo, \
-                 a.ar_status, \
-                 a.ar_dtgerado, \
-                 a.telefone, \
-                 a.linh_id, \
-                 a.ar_email_addresses, \
-                 a.ar_json, \
-                 i.ip_id, \
-                 i.ip_ip, \
-                 i.ip_tempo, \
-                 i.ip_lat, \
-                 i.ip_long, \
-                 i.ip_operadora, \
-                 i.telefone AS ip_telefone, \
-                 i.linh_id  AS ip_linh_id, \
-                 i.ar_id    AS ip_ar_id
-          FROM leitores.tb_whatszap_iptime i
-                   JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = i.ar_id
-          WHERE i.ip_tempo < '2025-01-01'
-          ORDER BY i.ip_tempo DESC \
-          """
+          SELECT a.ar_id, a.ar_dtcadastro, a.ar_arquivo, a.ar_tipo, a.ar_status, a.ar_dtgerado, a.telefone, a.linh_id, a.ar_email_addresses, a.ar_json, i.ip_id, i.ip_ip, i.ip_tempo, i.ip_lat, i.ip_long, i.ip_operadora, i.telefone AS ip_telefone, i.linh_id  AS ip_linh_id, i.ar_id    AS ip_ar_id FROM leitores.tb_whatszap_iptime i JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = i.ar_id WHERE i.ip_tempo < '2025-01-01' ORDER BY i.ip_tempo DESC """
 
     total = 0
 
