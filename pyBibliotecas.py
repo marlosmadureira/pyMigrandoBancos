@@ -113,3 +113,20 @@ def testar_conexao_postgres_bk():
 
 def beep():
     subprocess.run(["play", "-nq", "synth", "0.2", "sin", "440"])
+
+
+def grava_log(content, arquivo):
+    arquivo = f"{arquivo}"
+    with open(arquivo, "a") as text_file:
+        text_file.write('{}'.format(content) + '\n')
+    text_file.close()
+
+def get_last_id(arquivo):
+    try:
+        with open(arquivo, "r") as f:
+            linhas = f.readlines()
+            if not linhas:  # arquivo vazio
+                return None
+            return linhas[-1].strip()  # pega a última linha sem \n
+    except FileNotFoundError:
+        return None

@@ -67,6 +67,10 @@ def insert_batch_destino_83(rows):
 
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_iptime, dados_iptime)
+
+            for r in rows:
+                grava_log(r[0], "iptimes.txt")  # ar_id
+
             con.commit()
 
             return {
@@ -115,6 +119,10 @@ def insert_batch_destino_132(rows):
 
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_iptime, dados_iptime)
+
+            for r in rows:
+                grava_log(r[0], "iptimes.txt")  # ar_id
+
             con.commit()
         except Exception as e:
             con.rollback()
@@ -158,8 +166,15 @@ def delete_origem(ids):
 
 
 def mainipTimes():
-    sql = """
-          SELECT a.ar_id, a.ar_dtcadastro, a.ar_arquivo, a.ar_tipo, a.ar_status, a.ar_dtgerado, a.telefone, a.linh_id, a.ar_email_addresses, a.ar_json, i.ip_id, i.ip_ip, i.ip_tempo, i.ip_lat, i.ip_long, i.ip_operadora, i.telefone AS ip_telefone, i.linh_id  AS ip_linh_id, i.ar_id    AS ip_ar_id FROM leitores.tb_whatszap_iptime i JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = i.ar_id WHERE i.ip_tempo < '2025-01-01' ORDER BY i.ip_tempo DESC """
+    ultimo_id = get_last_id("iptimes.txt")
+    if ultimo_id:
+        ultimo_id = 0
+        print("Último ID gravado:", ultimo_id)
+    else:
+        print("Nenhum ID encontrado ainda.")
+
+    sql = f"""
+          SELECT a.ar_id, a.ar_dtcadastro, a.ar_arquivo, a.ar_tipo, a.ar_status, a.ar_dtgerado, a.telefone, a.linh_id, a.ar_email_addresses, a.ar_json, i.ip_id, i.ip_ip, i.ip_tempo, i.ip_lat, i.ip_long, i.ip_operadora, i.telefone AS ip_telefone, i.linh_id  AS ip_linh_id, i.ar_id    AS ip_ar_id FROM leitores.tb_whatszap_iptime i JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = i.ar_id WHERE a.ar_id > {ultimo_id} AND i.ip_tempo < '2025-01-01' ORDER BY a.ar_id ASC"""
 
     total = 0
 

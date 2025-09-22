@@ -68,6 +68,10 @@ def insert_batch_destino_83(rows):
 
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_index, dados_index)
+
+            for r in rows:
+                grava_log(r[0], "zacontatos.txt")  # ar_id
+
             con.commit()
             return {
                 "indn_ids": [r[10] for r in rows],
@@ -114,6 +118,10 @@ def insert_batch_destino_132(rows):
 
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_index, dados_index)
+
+            for r in rows:
+                grava_log(r[0], "zacontatos.txt")  # ar_id
+
             con.commit()
         except Exception as e:
             con.rollback()
@@ -156,7 +164,14 @@ def delete_origem(ids):
 
 
 def mainNewLogs():
-    sql = """
+    ultimo_id = get_last_id("zacontatos.txt")
+    if ultimo_id:
+        print("Último ID gravado:", ultimo_id)
+    else:
+        ultimo_id = 0
+        print("Nenhum ID encontrado ainda.")
+
+    sql = f"""
         SELECT 
             a.ar_id, a.ar_dtcadastro, a.ar_arquivo, a.ar_tipo, a.ar_status, 
             a.ar_dtgerado, a.telefone, a.linh_id, a.ar_email_addresses, a.ar_json,
@@ -166,8 +181,8 @@ def mainNewLogs():
             i.json_analise, i.obs_analise
         FROM leitores.tb_whatszap_index_zapcontatos_new i
         JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = i.ar_id
-        WHERE i.datahora < '2025-01-01'
-        ORDER BY i.datahora DESC
+        WHERE a.ar_id > {ultimo_id} AND i.datahora < '2025-01-01'
+        ORDER BY a.ar_id ASC
     """
     total = 0
     for lote in fetch_batches(sql):

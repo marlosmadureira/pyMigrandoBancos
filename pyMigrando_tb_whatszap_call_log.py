@@ -68,6 +68,10 @@ def insert_batch_destino_83(rows):
 
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_call, dados_call)
+
+            for r in rows:
+                grava_log(r[0], "call_logs.txt")  # ar_id
+
             con.commit()
 
             return {
@@ -112,6 +116,9 @@ def insert_batch_destino_132(rows):
                 (r[10], r[11], r[12], r[13], r[14], r[15], r[16], r[17], r[18], r[19],
                  r[20], r[21], r[22], r[23], r[24], r[25], r[26], r[27], r[28]) for r in rows
             ]
+
+            for r in rows:
+                grava_log(r[0], "call_logs.txt")  # ar_id
 
             db.executemany(insert_arquivo, dados_arquivo)
             db.executemany(insert_call, dados_call)
@@ -158,6 +165,13 @@ def delete_origem(ids):
 
 
 def mainCallLogs():
+    ultimo_id = get_last_id("call_logs.txt")
+    if ultimo_id:
+        print("Último ID gravado:", ultimo_id)
+    else:
+        ultimo_id = 0
+        print("Nenhum ID encontrado ainda.")
+
     sql = """
         SELECT 
             a.ar_id, a.ar_dtcadastro, a.ar_arquivo, a.ar_tipo, a.ar_status, 
@@ -168,8 +182,8 @@ def mainCallLogs():
             c.telefone, c.ar_id, c.linh_id, c.sentido, c.json_analise, c.obs_analise
         FROM leitores.tb_whatszap_call_log c
         JOIN leitores.tb_whatszap_arquivo a ON a.ar_id = c.ar_id
-        WHERE c.call_timestamp < '2025-01-01'
-        ORDER BY c.call_timestamp DESC
+        WHERE a.ar_id > {ultimo_id} AND c.call_timestamp < '2025-01-01'
+        ORDER BY a.ar_id ASC
     """
 
     total = 0
