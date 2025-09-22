@@ -75,7 +75,7 @@ def insert_batch_destino_83(rows):
             }
         except Exception as e:
             con.rollback()
-            print_color(f"Erro ao inserir no destino (call_log): {e}", 31)
+            print_color(f"Erro ao inserir no destino (ip_id): {e}", 31)
             return {"ip_ids": [], "ar_ids": []}
         finally:
             db.close()
@@ -118,7 +118,7 @@ def insert_batch_destino_132(rows):
             con.commit()
         except Exception as e:
             con.rollback()
-            print_color(f"Erro ao inserir no destino (call_log): {e}", 31)
+            print_color(f"Erro ao inserir no destino (ip_id): {e}", 31)
         finally:
             db.close()
 
@@ -146,13 +146,13 @@ def delete_origem(ids):
     with conectBDPostgresProd(DB_HOST_PROD, DB_NAME_PROD, DB_USER_PROD, DB_PASS_PROD) as con:
         db = con.cursor()
         try:
-            sql = "DELETE FROM leitores.tb_whatszap_iptime WHERE cal_id IN %s"
+            sql = "DELETE FROM leitores.tb_whatszap_iptime WHERE ip_id IN %s"
             db.execute(sql, (tuple(ids),))  # precisa ser tupla para o psycopg2 entender
             print_color(f"Deletados {db.rowcount} registros", 32)
             con.commit()
         except Exception as e:
             con.rollback()
-            print_color(f"Erro ao deletar origem (call_log): {e}", 31)
+            print_color(f"Erro ao deletar origem (ip_id): {e}", 31)
         finally:
             db.close()
 
